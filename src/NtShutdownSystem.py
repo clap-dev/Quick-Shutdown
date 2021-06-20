@@ -25,7 +25,6 @@ class Shutdown:
             ) # Byref Previous Value As UInt
         )
 
-
         if status != 0:
             return False
 
