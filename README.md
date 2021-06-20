@@ -5,7 +5,7 @@ Ever need to shutdown your computer in the blink of an eye? You got it.
 
 ## Usage
 
-```python
+```bash
 python NtShutdownSystem.py
 ```
 
