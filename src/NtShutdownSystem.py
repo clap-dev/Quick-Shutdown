@@ -35,7 +35,7 @@ class Shutdown:
     def NtShutdownSystem(self):
         if self.RtlAdjustPrivilege():
             return self.NTDLL.NtShutdownSystem(
-                False # ShutdownNoReboot
+                False # ShutdownNoReboot Action
             )
 
 if __name__ == '__main__':
