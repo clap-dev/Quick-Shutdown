@@ -2,11 +2,13 @@ import ctypes
 
 class Shutdown:
     def __init__(self):
-        self.NTDLL = ctypes.windll.ntdll
+        self.ntdll = ctypes.WinDLL(
+            'ntdll.dll',
+            use_last_error=True
+        )
 
-    def RtlAdjustPrivilege(self):
-        _RtlAdjustPrivilege = self.NTDLL.RtlAdjustPrivilege
-        _RtlAdjustPrivilege.argtypes = [
+        self.RtlAdjustPrivilege = self.ntdll.RtlAdjustPrivilege
+        self.RtlAdjustPrivilege.argtypes = [
             ctypes.c_ulong,
             ctypes.c_long,
             ctypes.c_long,
@@ -14,26 +16,25 @@ class Shutdown:
                 ctypes.c_long
             )
         ]
-        _RtlAdjustPrivilege.restype = ctypes.c_long
+        self.RtlAdjustPrivilege.restype = ctypes.c_long
 
-        status = _RtlAdjustPrivilege(
+    def set_privilege(self):
+        if self.RtlAdjustPrivilege(
             19, # Privilege (SE_SHUTDOWN_PRIVILEGE)
             True, # Enable Privilege
             False, # Current Thread
             ctypes.byref(
                 ctypes.c_long(0)
             ) # Byref Previous Value As UInt
-        )
-
-        if status != 0:
+        ):
             return False
 
         else:
             return True
 
-    def NtShutdownSystem(self):
-        if self.RtlAdjustPrivilege():
-            return self.NTDLL.NtShutdownSystem(
+    def shutdown_system(self):
+        if self.set_privilege():
+            return self.ntdll.NtShutdownSystem(
                 False # ShutdownNoReboot Action
             )
 
