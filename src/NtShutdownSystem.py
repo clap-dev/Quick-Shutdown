@@ -40,4 +40,4 @@ class Shutdown:
 
 if __name__ == '__main__':
     shutdown = Shutdown()
-    shutdown.NtShutdownSystem()
+    shutdown.shutdown_system()
